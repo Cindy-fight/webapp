@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block layout %}
+    <style>
+    .panel{border-radius:0px;margin-top:40%;border:0px;}
+    .panel-heading{background-color:#000000 !important;color:#ffffff !important;border-radius:0px;}
+    .panel-body{border:1px solid #000000;}
+    </style>
+
+<body style="margin-top: 100px">
+
+    {% if message %}
+      <h2 style="color: red;text-align: center;">{{ message }}</h2>
+    {% endif %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4 col-md-4 col-lg-4"></div>
+        <div class="col-sm-4 col-md-4 col-lg-4">
+            <div class="panel">
+                <div class="panel-heading">
+                    <span class="panel-title">SIGN UP</span>
+                </div>
+                <div class="panel-body">
+                    <form action="/register" method="post">
+{#                        <span class="control-label"></span>#}
+                        用户名：<input class="form-control" name="username" placeholder="Username" value="{{ username }}"><br>
+{#                        <span class="control-label"></span>#}
+                        密&nbsp;码：<input class="form-control" name="password" placeholder="Password" type="password"><br>
+{#                        <span class="control-label"></span>#}
+                        昵&nbsp;称：<input class="form-control" name="nickname" placeholder="NickName" type="text"><br>
+                        <button class="btn btn-primary" type="submit">注  册</button><br>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 col-md-4 col-lg-4"></div>
+    </div>
+</div>
+
+</div>
+</body>
+
+{% endblock %}

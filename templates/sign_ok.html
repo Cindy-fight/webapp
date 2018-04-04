@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+<title>Welcome, {{ username }}</title>
+{% block layout %}
+    <style>
+        h1{text-align: center;font-size: 80px;}
+    </style>
+<body>
+<div style="margin-top: 100px;">
+    <h1>Welcome, {{ username }}!</h1>
+</div>
+</body>
+</html>
+
+{% endblock %}

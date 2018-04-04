@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>麦广财务系统</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/static/css/bootstrap.css?v=10042" rel="stylesheet">
+    <style>
+        h1{text-align:center;font-size:20px;}
+        h2{font-size:18px;}
+        h3{font-size:16px;}
+    </style>
+</head>
+<body>
+<div class="container">
+<!-- 标题 -->
+<div>
+    <h1>麦广财务系统实时同步对接API文档</h1>
+</div>
+
+<!-- 简介 -->
+<div>
+    <h2>简要介绍</h2>
+<p>
+    1、各个业务部门按照该文档进行与财务系统的实时对接。对接的数据信息分两种：1-收入类型；2-成本类型。
+</p>
+        <p>
+        2、测试域名：fmstest.maimob.net &nbsp;&nbsp;&nbsp;正式域名：fms.maimob.net
+    </p>
+    <p>
+        3、通用参数介绍：
+        <table class="table table-bordered table-hover">
+        <thead><tr><td>参数key</td><td>说明</td></tr></thead>
+        <tbody><tr><td>sign</td><td>字符串，每个接口必传参数，用于校验用户身份，找周松申请</td></tr></tbody>
+        </table>
+    </p>
+    <p>
+        4、实时接入api共6个，分别为
+        <table class="table table-bordered table-hover">
+        <thead><tr><td>API</td><td>说明</td></tr></thead>
+        <tbody>
+        <tr><td>api/get_line_id</td><td>根据业务线的名称获取到对应的id信息。每个业务线名称会对应一个唯一的id，这个id获取到以后，可以在业务端程序中存储下来，该值不会改变。</td></tr>
+        <tr><td>api/get_customer_id</td><td>根据客户的名称获取到对应的id信息。每个客户名称会对应一个唯一的id，这个映射关系业务端程序可以存储下来，该映射关系不会改变，除非客户名称有变化，而财务系统未更新该变化。</td></tr>
+        <tr><td>api/get_supplier_id</td><td>根据供应商的名称获取到对应到id信息。每个供应商名称会对应一个唯一的id，这个映射关系业务端程序可以存储下来，该映射关系不会改变，除非供应商名称有变化，而财务系统未更新该变化。</td></tr>
+        <tr><td>api/get_invoice_title_id</td><td>根据开收票公司的名称获取到对应到id信息。每个开收票公司名称会对应一个唯一的id，这个id获取到以后，可以在业务端程序中存储下来，该值不会改变，除非财务部修改了该名称。</td></tr>
+        <tr><td>api/set_income_info</td><td>实时对接的核心API，保存收入数据信息</td></tr>
+        <tr><td>api/set_cost_info</td><td>实时对接的核心API，保存成本数据信息</td></tr>
+        </tbody>
+        </table>
+    </p>
+
+    <p>
+        5、所有参数提交均以GET方式,返回结果均为JSON格式。
+    </p>
+
+
+
+</div>
+<hr>
+<!-- 获取业务线id -->
+<div>
+    <h2>获取业务线id【api/get_line_id】</h2>
+    <h3>参数说明</h3>
+    <table class="table table-bordered table-hover">
+        <thead><tr><td>参数key</td><td>类型</td><td>说明</td></tr></thead>
+        <tbody>
+        <tr><td>sign</td><td>字符串</td><td>每个接口必传参数，用于校验用户身份</td></tr>
+        <tr><td>name</td><td>字符串</td><td>业务线名称</td></tr>
+        </tbody>
+    </table>
+
+    <h3>结果说明</h3>
+    <table class="table table-bordered table-hover">
+        <thead><tr><td>结果key</td><td>类型</td><td>说明</td></tr></thead>
+        <tbody>
+        <tr><td>code</td><td>整数</td><td>1-表示成功，其他均为失败，非1时请邮件或其他方式通知到人，查看具体的出错原因</td></tr>
+        <tr><td>msg</td><td>字符串</td><td>说明信息，code非1情况下是失败原因</td></tr>
+        <tr><td>line_id</td><td>整数</td><td>业务线id，用于api/set_income_info和api/set_cost_info的参数</td></tr>
+        </tbody>
+    </table>
+
+</div>
+<hr>
+<!-- 获取客户id -->
+<div>
+    <h2>获取客户id【api/get_customer_id】</h2>
+    <h3>参数说明</h3>
+    <table class="table table-bordered table-hover">
+        <thead><tr><td>参数key</td><td>类型</td><td>说明</td></tr></thead>
+        <tbody>
+        <tr><td>sign</td><td>字符串</td><td>每个接口必传参数，用于校验用户身份</td></tr>
+        <tr><td>name</td><td>字符串</td><td>客户名称</td></tr>
+        <tr><td>line_id</td><td>整数</td><td>api/get_line_id接口获取的line_id</td></tr>
+        </tbody>
+    </table>
+
+    <h3>结果说明</h3>
+    <table class="table table-bordered table-hover">
+        <thead><tr><td>结果key</td><td>类型</td><td>说明</td></tr></thead>
+        <tbody>
+        <tr><td>code</td><td>整数</td><td>1-表示成功，其他均为失败，非1时请邮件或其他方式通知到人，查看具体的出错原因</td></tr>
+        <tr><td>msg</td><td>字符串</td><td>说明信息，code非1情况下是失败原因</td></tr>
+        <tr><td>customer_id</td><td>整数</td><td>客户id，用于api/set_income_info的参数</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<hr>
+<!-- 获取供应商id -->
+<div>
+    <h2>获取供应商id【api/get_supplier_id	】</h2>
+    <h3>参数说明</h3>
+    <table class="table table-bordered table-hover">
+        <thead><tr><td>参数key</td><td>类型</td><td>说明</td></tr></thead>
+        <tbody>
+        <tr><td>sign</td><td>字符串</td><td>每个接口必传参数，用于校验用户身份</td></tr>
+        <tr><td>name</td><td>字符串</td><td>客户名称</td></tr>
+        <tr><td>line_id</td><td>整数</td><td>api/get_line_id接口获取的line_id</td></tr>
+        </tbody>
+    </table>
+
+    <h3>结果说明</h3>
+    <table class="table table-bordered table-hover">
+        <thead><tr><td>结果key</td><td>类型</td><td>说明</td></tr></thead>
+        <tbody>
+        <tr><td>code</td><td>整数</td><td>1-表示成功，其他均为失败，非1时请邮件或其他方式通知到人，查看具体的出错原因</td></tr>
+        <tr><td>msg</td><td>字符串</td><td>说明信息，code非1情况下是失败原因</td></tr>
+        <tr><td>supplier_id</td><td>整数</td><td>供应商id，用于api/set_cost_info的参数</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 获取开收票公司id -->
+<div>
+    <h2>获取开收票公司id【api/get_invoice_title_id	】</h2>
+    <h3>参数说明</h3>
+    <table class="table table-bordered table-hover">
+        <thead><tr><td>参数key</td><td>类型</td><td>说明</td></tr></thead>
+        <tbody>
+        <tr><td>sign</td><td>字符串</td><td>每个接口必传参数，用于校验用户身份</td></tr>
+        <tr><td>name</td><td>字符串</td><td>开收票公司名称</td></tr>
+        <tr><td>line_id</td><td>整数</td><td>api/get_line_id接口获取的line_id</td></tr>
+        </tbody>
+    </table>
+
+    <h3>结果说明</h3>
+    <table class="table table-bordered table-hover">
+        <thead><tr><td>结果key</td><td>类型</td><td>说明</td></tr></thead>
+        <tbody>
+        <tr><td>code</td><td>整数</td><td>1-表示成功，其他均为失败，非1时请邮件或其他方式通知到人，查看具体的出错原因</td></tr>
+        <tr><td>msg</td><td>字符串</td><td>说明信息，code非1情况下是失败原因</td></tr>
+        <tr><td>invoice_title_id</td><td>整数</td><td>开收票公司id，用于api/set_income_info和api/set_cost_info的参数</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 提交收入数据信息 -->
+<div>
+    <h2>提交收入数据信息【api/set_income_info】</h2>
+    <h3>参数说明</h3>
+    <table class="table table-bordered table-hover">
+        <thead><tr><td>参数key</td><td>类型</td><td>说明</td></tr></thead>
+        <tbody>
+        <tr><td>sign</td><td>字符串</td><td>每个接口必传参数，用于校验用户身份</td></tr>
+        <tr><td>line_id</td><td>整数</td><td>api/get_line_id接口获取的line_id</td></tr>
+        <tr><td>invoice_title_id</td><td>整数</td><td>api/get_invoice_title_id接口获取的invoice_title_id</td></tr>
+        <tr><td>customer_id</td><td>整数</td><td>api/get_customer_id接口获取的customer_id</td></tr>
+        <tr><td>service_name</td><td>字符串</td><td>服务名称，该字段具有唯一性，实时对接的核心所在，所以各个业务部门技术需要与业务人员进行沟通，设计该字段如何拼接，同一个服务名称，多次请求该API，会以最后一次提交的数据作为最终数据</td></tr>
+        <tr><td>belong_period</td><td>字符串</td><td>该数据的归属期间，如有疑问与业务人员进行沟通。格式如：2018-03。</td></tr>
+        <tr><td>money</td><td>浮点数</td><td>单位元，该数据对应的金额。<span style="color:red;">需要注意的是该金额是累加金额，各个业务部门自行处理该金额的累计情况，传递给财务系统的是最终金额。</span></td></tr>
+        </tbody>
+    </table>
+
+    <h3>结果说明</h3>
+    <table class="table table-bordered table-hover">
+        <thead><tr><td>结果key</td><td>类型</td><td>说明</td></tr></thead>
+        <tbody>
+        <tr><td>code</td><td>整数</td><td>1-表示成功，其他均为失败，非1时请邮件或其他方式通知到人，查看具体的出错原因</td></tr>
+        <tr><td>msg</td><td>字符串</td><td>说明信息，code非1情况下是失败原因</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- 提交成本数据信息 -->
+<div>
+    <h2>提交成本数据信息【api/set_cost_info】</h2>
+    <h3>参数说明</h3>
+    <table class="table table-bordered table-hover">
+        <thead><tr><td>参数key</td><td>类型</td><td>说明</td></tr></thead>
+        <tbody>
+        <tr><td>sign</td><td>字符串</td><td>每个接口必传参数，用于校验用户身份</td></tr>
+        <tr><td>line_id</td><td>整数</td><td>api/get_line_id接口获取的line_id</td></tr>
+        <tr><td>invoice_title_id</td><td>整数</td><td>api/get_invoice_title_id接口获取的invoice_title_id</td></tr>
+        <tr><td>supplier_id</td><td>整数</td><td>api/get_supplier_id接口获取的supplier_id</td></tr>
+        <tr><td>service_name</td><td>字符串</td><td>服务名称，该字段具有唯一性，实时对接的核心所在，所以各个业务部门技术需要与业务人员进行沟通，设计该字段如何拼接，同一个服务名称，多次请求该API，会以最后一次提交的数据作为最终数据</td></tr>
+        <tr><td>belong_period</td><td>字符串</td><td>该数据的归属期间，如有疑问与业务人员进行沟通。格式如：2018-03。</td></tr>
+        <tr><td>money</td><td>浮点数</td><td>单位元，该数据对应的金额。<span style="color:red;">需要注意的是该金额是累加金额，各个业务部门自行处理该金额的累计情况，传递给财务系统的是最终金额。</span></td></tr>
+        <tr><td>type</td><td>整数</td><td>数据的类别，1-预付；2-非预付</td></tr>
+        </tbody>
+    </table>
+
+    <h3>结果说明</h3>
+    <table class="table table-bordered table-hover">
+        <thead><tr><td>结果key</td><td>类型</td><td>说明</td></tr></thead>
+        <tbody>
+        <tr><td>code</td><td>整数</td><td>1-表示成功，其他均为失败，非1时请邮件或其他方式通知到人，查看具体的出错原因</td></tr>
+        <tr><td>msg</td><td>字符串</td><td>说明信息，code非1情况下是失败原因</td></tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+</div>
+</body>
+</html>
